@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ZeusDNSChanger.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Theme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Dark</Value>
+    </Setting>
+    <Setting Name="Language" Type="System.String" Scope="User">
+      <Value Profile="(Default)">English</Value>
+    </Setting>
+    <Setting Name="AutoRefreshIP" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CustomDnsServers" Type="System.String" Scope="User">
+      <Value Profile="(Default)"></Value>
+    </Setting>
+    <Setting Name="StartupWithWindows" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ZeusPlusToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)"></Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

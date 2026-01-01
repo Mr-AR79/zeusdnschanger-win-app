@@ -1,0 +1,205 @@
+<Window x:Class="ZeusDNSChanger.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" 
+        Height="550" 
+        Width="450"
+        Background="{StaticResource DarkBackgroundBrush}"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="SingleBorderWindow"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+    
+    <Grid Margin="20">
+        <StackPanel>
+            <!-- Header -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="&#xE713;" 
+                          Grid.Column="0"
+                          FontFamily="Segoe MDL2 Assets" 
+                          FontSize="24"
+                          Foreground="{StaticResource GoldBrush}"
+                          VerticalAlignment="Center"
+                          Margin="0,0,10,0"/>
+                <TextBlock x:Name="HeaderText"
+                          Text="Settings" 
+                          Grid.Column="1"
+                          FontSize="24" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}"
+                          VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- Theme Setting -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="&#xE771;" 
+                                  Grid.Column="0"
+                                  FontFamily="Segoe MDL2 Assets" 
+                                  FontSize="18"
+                                  Foreground="{StaticResource GoldBrush}"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,10,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock x:Name="ThemeText"
+                                      Text="Theme" 
+                                      FontSize="14" 
+                                      FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="ThemeDescText"
+                                      Text="Switch between Dark and Light mode" 
+                                      FontSize="11"
+                                      Foreground="{StaticResource TextSecondaryBrush}"
+                                      Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <ComboBox x:Name="ThemeComboBox"
+                                 Grid.Column="2"
+                                 Width="120"
+                                 SelectionChanged="ThemeComboBox_SelectionChanged">
+                            <ComboBoxItem x:Name="DarkThemeItem" Content="Dark" Tag="Dark" IsSelected="True"/>
+                            <ComboBoxItem x:Name="LightThemeItem" Content="Light" Tag="Light"/>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Language Setting -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="&#xF2B7;" 
+                                  Grid.Column="0"
+                                  FontFamily="Segoe MDL2 Assets" 
+                                  FontSize="18"
+                                  Foreground="{StaticResource GoldBrush}"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,10,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock x:Name="LanguageText"
+                                      Text="Language" 
+                                      FontSize="14" 
+                                      FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="LanguageDescText"
+                                      Text="Change application language" 
+                                      FontSize="11"
+                                      Foreground="{StaticResource TextSecondaryBrush}"
+                                      Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <ComboBox x:Name="LanguageComboBox"
+                                 Grid.Column="2"
+                                 Width="120"
+                                 SelectionChanged="LanguageComboBox_SelectionChanged">
+                            <ComboBoxItem x:Name="EnglishLangItem" Content="English" IsSelected="True"/>
+                            <ComboBoxItem x:Name="PersianLangItem" Content="فارسی"/>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Auto-refresh IP Setting -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="&#xE72C;" 
+                                  Grid.Column="0"
+                                  FontFamily="Segoe MDL2 Assets" 
+                                  FontSize="18"
+                                  Foreground="{StaticResource GoldBrush}"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,10,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock x:Name="AutoRefreshText"
+                                      Text="Auto-refresh IP" 
+                                      FontSize="14" 
+                                      FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="AutoRefreshDescText"
+                                      Text="Automatically refresh IP when connected" 
+                                      FontSize="11"
+                                      Foreground="{StaticResource TextSecondaryBrush}"
+                                      Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <CheckBox x:Name="AutoRefreshCheckBox"
+                                 Grid.Column="2"
+                                 IsChecked="True"
+                                 VerticalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Start with Windows Setting -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="&#xE7E8;" 
+                                  Grid.Column="0"
+                                  FontFamily="Segoe MDL2 Assets" 
+                                  FontSize="18"
+                                  Foreground="{StaticResource GoldBrush}"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,10,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock x:Name="StartupText"
+                                      Text="Start with Windows" 
+                                      FontSize="14" 
+                                      FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="StartupDescText"
+                                      Text="Launch application when Windows starts" 
+                                      FontSize="11"
+                                      Foreground="{StaticResource TextSecondaryBrush}"
+                                      Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <CheckBox x:Name="StartupCheckBox"
+                                 Grid.Column="2"
+                                 IsChecked="False"
+                                 VerticalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Buttons -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="SaveButton"
+                       Grid.Column="1"
+                       Content="Save &amp; Close"
+                       Width="120"
+                       Height="40"
+                       Click="SaveButton_Click"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
