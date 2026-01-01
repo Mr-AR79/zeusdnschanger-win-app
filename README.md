@@ -186,12 +186,12 @@ For Zeus Plus users, the application:
 ### Future Enhancements
 
 - [ ] Add DNS speed testing
-- [*] Support for custom DNS servers
+- [x] Support for custom DNS servers
 - [ ] DNS-over-HTTPS (DoH) support
-- [*] System tray minimization
-- [*] Startup with Windows option
-- [*] Multi-language support
-- [*] Connection history log
+- [x] System tray minimization
+- [x] Startup with Windows option
+- [x] Multi-language support
+- [x] Connection history log
 - [ ] Export/Import settings
 
 ## 📄 License
