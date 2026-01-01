@@ -93,8 +93,8 @@ ZeusDNSChanger/
 
 The application uses the following DNS addresses:
 
-- **Zeus Free**: 178.22.122.100, 185.51.200.2
-- **Zeus Plus**: Dynamic (set after token registration)
+- **Zeus Free**: 37.32.5.60
+- **Zeus Plus**: 37.32.5.34 (set after token registration)
 - **Google DNS**: 8.8.8.8, 8.8.4.4
 - **Cloudflare DNS**: 1.1.1.1, 1.0.0.1
 
@@ -186,12 +186,12 @@ For Zeus Plus users, the application:
 ### Future Enhancements
 
 - [ ] Add DNS speed testing
-- [ ] Support for custom DNS servers
+- [*] Support for custom DNS servers
 - [ ] DNS-over-HTTPS (DoH) support
-- [ ] System tray minimization
-- [ ] Startup with Windows option
-- [ ] Multi-language support
-- [ ] Connection history log
+- [*] System tray minimization
+- [*] Startup with Windows option
+- [*] Multi-language support
+- [*] Connection history log
 - [ ] Export/Import settings
 
 ## 📄 License
