@@ -11,13 +11,10 @@ namespace ZeusDNSChanger
             {
                 "English", new Dictionary<string, string>
                 {
-                    // Navigation
                     {"Home", "Home"},
                     {"ManageDns", "Manage DNS"},
                     {"ActivityLogs", "Activity Logs"},
                     {"Settings", "Settings"},
-                    
-                    // Main Window
                     {"AppTitle", "Zeus DNS Changer"},
                     {"AppSubtitle", "Secure and Fast DNS Management"},
                     {"SelectDnsServer", "Select DNS Server"},
@@ -26,8 +23,6 @@ namespace ZeusDNSChanger
                     {"ClearDnsCache", "Clear DNS Cache"},
                     {"ON", "ON"},
                     {"OFF", "OFF"},
-                    
-                    // Manage DNS
                     {"ManageDnsServers", "Manage DNS Servers"},
                     {"BuiltInDns", "Built-in DNS Servers"},
                     {"CustomDns", "Custom DNS Servers"},
@@ -39,8 +34,6 @@ namespace ZeusDNSChanger
                     {"Add", "Add"},
                     {"Cancel", "Cancel"},
                     {"Delete", "Delete"},
-                    
-                    // Settings
                     {"Theme", "Theme"},
                     {"ThemeDesc", "Switch between Dark and Light mode"},
                     {"Dark", "Dark"},
@@ -54,13 +47,9 @@ namespace ZeusDNSChanger
                     {"StartupWithWindows", "Start with Windows"},
                     {"StartupWithWindowsDesc", "Launch application when Windows starts"},
                     {"SaveSettings", "Save Settings"},
-                    
-                    // Logs
                     {"CopyLogs", "Copy Logs"},
                     {"ClearLogs", "Clear Logs"},
                     {"NoActivity", "No activity yet..."},
-                    
-                    // Messages
                     {"Success", "Success"},
                     {"Error", "Error"},
                     {"Warning", "Warning"},
@@ -70,8 +59,6 @@ namespace ZeusDNSChanger
                     {"Yes", "Yes"},
                     {"No", "No"},
                     {"ConfirmDelete", "Confirm Delete"},
-                    
-                    // Dialog Messages
                     {"AdminRequired", "Administrator privileges required!"},
                     {"EnterDnsName", "Please enter a DNS name!"},
                     {"EnterPrimaryDns", "Please enter a primary DNS!"},
@@ -102,13 +89,10 @@ namespace ZeusDNSChanger
             {
                 "فارسی", new Dictionary<string, string>
                 {
-                    // Navigation
                     {"Home", "خانه"},
                     {"ManageDns", "مدیریت DNS"},
                     {"ActivityLogs", "گزارش فعالیت"},
-                    {"Settings", "تنظیمات"},
-                    
-                    // Main Window
+                    {"Settings", "تنظیمات"},                   
                     {"AppTitle", "تغییر‌دهنده DNS زئوس"},
                     {"AppSubtitle", "مدیریت امن و سریع DNS"},
                     {"SelectDnsServer", "انتخاب سرور DNS"},
@@ -116,9 +100,7 @@ namespace ZeusDNSChanger
                     {"UpdateInterval", "فاصله به‌روزرسانی (دقیقه)"},
                     {"ClearDnsCache", "پاکسازی کش DNS"},
                     {"ON", "روشن"},
-                    {"OFF", "خاموش"},
-                    
-                    // Manage DNS
+                    {"OFF", "خاموش"},                   
                     {"ManageDnsServers", "مدیریت سرورهای DNS"},
                     {"BuiltInDns", "سرورهای DNS پیش‌فرض"},
                     {"CustomDns", "سرورهای DNS سفارشی"},
@@ -129,9 +111,7 @@ namespace ZeusDNSChanger
                     {"SecondaryDns", "DNS ثانویه (اختیاری)"},
                     {"Add", "افزودن"},
                     {"Cancel", "انصراف"},
-                    {"Delete", "حذف"},
-                    
-                    // Settings
+                    {"Delete", "حذف"},                   
                     {"Theme", "تم"},
                     {"ThemeDesc", "تغییر بین حالت تاریک و روشن"},
                     {"Dark", "تاریک"},
@@ -144,14 +124,10 @@ namespace ZeusDNSChanger
                     {"AutoRefreshDesc", "بررسی و به‌روزرسانی خودکار IP هنگام اتصال"},
                     {"StartupWithWindows", "اجرا با ویندوز"},
                     {"StartupWithWindowsDesc", "اجرای خودکار برنامه با روشن شدن ویندوز"},
-                    {"SaveSettings", "ذخیره تنظیمات"},
-                    
-                    // Logs
+                    {"SaveSettings", "ذخیره تنظیمات"},                   
                     {"CopyLogs", "کپی گزارش"},
                     {"ClearLogs", "پاک کردن گزارش"},
-                    {"NoActivity", "هنوز فعالیتی ثبت نشده..."},
-                    
-                    // Messages
+                    {"NoActivity", "هنوز فعالیتی ثبت نشده..."},                   
                     {"Success", "موفقیت"},
                     {"Error", "خطا"},
                     {"Warning", "هشدار"},
@@ -161,8 +137,6 @@ namespace ZeusDNSChanger
                     {"Yes", "بله"},
                     {"No", "خیر"},
                     {"ConfirmDelete", "تأیید حذف"},
-                    
-                    // Dialog Messages
                     {"AdminRequired", "نیاز به دسترسی مدیر!"},
                     {"EnterDnsName", "لطفاً نام DNS را وارد کنید!"},
                     {"EnterPrimaryDns", "لطفاً DNS اصلی را وارد کنید!"},

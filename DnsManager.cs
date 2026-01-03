@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace ZeusDNSChanger
 {
@@ -16,10 +17,17 @@ namespace ZeusDNSChanger
             public static readonly (string Primary, string Secondary) Cloudflare = ("1.1.1.1", "1.0.0.1");
         }
 
+        private static string _cachedInterfaceName = null;
+        private static DateTime _cacheTime = DateTime.MinValue;
+        private static readonly TimeSpan CacheDuration = TimeSpan.FromSeconds(30);
+
         public static string GetActiveNetworkInterface()
         {
             try
             {
+                if (_cachedInterfaceName != null && DateTime.Now - _cacheTime < CacheDuration)
+                    return _cachedInterfaceName;
+
                 var interfaces = NetworkInterface.GetAllNetworkInterfaces()
                     .Where(ni => ni.OperationalStatus == OperationalStatus.Up &&
                                 ni.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
@@ -32,9 +40,15 @@ namespace ZeusDNSChanger
                         ni.GetIPProperties().GatewayAddresses.Count > 0);
 
                     if (activeInterface != null)
-                        return activeInterface.Name;
+                    {
+                        _cachedInterfaceName = activeInterface.Name;
+                        _cacheTime = DateTime.Now;
+                        return _cachedInterfaceName;
+                    }
 
-                    return interfaces.First().Name;
+                    _cachedInterfaceName = interfaces.First().Name;
+                    _cacheTime = DateTime.Now;
+                    return _cachedInterfaceName;
                 }
 
                 return "No active network interface found";
@@ -82,13 +96,14 @@ namespace ZeusDNSChanger
                 if (interfaceName.StartsWith("Error") || interfaceName.StartsWith("No active"))
                     return false;
 
-                string command = $"interface ip set dns \"{interfaceName}\" static {primaryDns} primary";
-                ExecuteCommand(command);
-
                 if (!string.IsNullOrEmpty(secondaryDns))
                 {
-                    command = $"interface ip add dns \"{interfaceName}\" {secondaryDns} index=2";
-                    ExecuteCommand(command);
+                    ExecuteCommandFast($"interface ip set dns \"{interfaceName}\" static {primaryDns} primary");
+                    ExecuteCommandFireAndForget($"interface ip add dns \"{interfaceName}\" {secondaryDns} index=2");
+                }
+                else
+                {
+                    ExecuteCommandFast($"interface ip set dns \"{interfaceName}\" static {primaryDns} primary");
                 }
 
                 return true;
@@ -107,9 +122,7 @@ namespace ZeusDNSChanger
                 if (interfaceName.StartsWith("Error") || interfaceName.StartsWith("No active"))
                     return false;
 
-                string command = $"interface ip set dns \"{interfaceName}\" dhcp";
-                ExecuteCommand(command);
-
+                ExecuteCommandFast($"interface ip set dns \"{interfaceName}\" dhcp");
                 return true;
             }
             catch (Exception)
@@ -122,7 +135,7 @@ namespace ZeusDNSChanger
         {
             try
             {
-                ExecuteCommand("ipconfig /flushdns");
+                ExecuteCommandFireAndForget("ipconfig /flushdns");
                 return true;
             }
             catch (Exception)
@@ -131,7 +144,7 @@ namespace ZeusDNSChanger
             }
         }
 
-        private static string ExecuteCommand(string command)
+        private static void ExecuteCommandFast(string command)
         {
             try
             {
@@ -139,35 +152,46 @@ namespace ZeusDNSChanger
                 {
                     FileName = "netsh",
                     Arguments = command,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Verb = "runas"
+                    RedirectStandardOutput = false,
+                    RedirectStandardError = false
                 };
-
-                if (command.Contains("ipconfig"))
-                {
-                    psi.FileName = "ipconfig";
-                    psi.Arguments = "/flushdns";
-                }
 
                 using (Process process = Process.Start(psi))
                 {
-                    string output = process.StandardOutput.ReadToEnd();
-                    string error = process.StandardError.ReadToEnd();
-                    process.WaitForExit();
-
-                    if (!string.IsNullOrEmpty(error))
-                        return error;
-
-                    return output;
+                    process.WaitForExit(1000);
                 }
             }
-            catch (Exception ex)
+            catch { }
+        }
+
+        private static void ExecuteCommandFireAndForget(string command)
+        {
+            try
             {
-                return $"Error: {ex.Message}";
+                string fileName = "netsh";
+                string args = command;
+
+                if (command.Contains("ipconfig"))
+                {
+                    fileName = "ipconfig";
+                    args = "/flushdns";
+                }
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = fileName,
+                    Arguments = args,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = false,
+                    RedirectStandardError = false
+                };
+
+                Process.Start(psi);
             }
+            catch { }
         }
     }
 }

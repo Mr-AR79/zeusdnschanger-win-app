@@ -31,6 +31,7 @@ namespace ZeusDNSChanger
         private (string Primary, string Secondary) currentDnsAddresses;
         private NotifyIcon notifyIcon;
         private System.Text.StringBuilder logBuilder = new System.Text.StringBuilder();
+        private bool isInitialized = false;
 
         public MainWindow()
         {
@@ -349,6 +350,12 @@ namespace ZeusDNSChanger
                 TokenTextBox.Text = Properties.Settings.Default.ZeusPlusToken;
             }
 
+            if (IntervalSlider != null)
+            {
+                IntervalSlider.Value = Properties.Settings.Default.IpRefreshInterval;
+            }
+
+            isInitialized = true;
             AddLog("✅ Settings loaded");
         }
 
@@ -404,7 +411,6 @@ namespace ZeusDNSChanger
             }
 
             SetDarkTitleBar(!isLightTheme);
-
             UpdateThemeElements(goldBrush, darkBackgroundBrush, darkSurfaceBrush, darkBorderBrush, textPrimaryBrush, textSecondaryBrush, isLightTheme);
         }
 
@@ -419,14 +425,12 @@ namespace ZeusDNSChanger
                 Direction = 270
             } : null;
 
-            // === TOP BAR ===
             if (TopBar != null)
             {
                 TopBar.Background = isLight ? surface : background;
                 TopBar.BorderBrush = border;
             }
 
-            // === HOME PAGE - DNS Selection Card ===
             if (DnsSelectionCard != null)
             {
                 DnsSelectionCard.Background = surface;
@@ -434,14 +438,12 @@ namespace ZeusDNSChanger
                 DnsSelectionCard.Effect = cardEffect;
             }
             
-            // Token Panel
             if (TokenPanel != null)
             {
                 TokenPanel.Background = isLight ? new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 250, 230)) : background;
                 TokenPanel.BorderBrush = gold;
             }
             
-            // Network Info Card
             if (NetworkInfoCard != null)
             {
                 NetworkInfoCard.Background = isLight ? new SolidColorBrush(System.Windows.Media.Color.FromRgb(248, 249, 250)) : background;
@@ -451,14 +453,12 @@ namespace ZeusDNSChanger
             if (ActiveDnsText != null) ActiveDnsText.Foreground = textSecondary;
             if (IntervalLabel != null) IntervalLabel.Foreground = textPrimary;
 
-            // === MANAGE DNS PAGE ===
             if (ManageDnsHeader != null)
             {
                 ManageDnsHeader.Background = surface;
                 ManageDnsHeader.BorderBrush = border;
             }
             
-            // DNS Cards
             if (ZeusFreeCard != null)
             {
                 ZeusFreeCard.Background = surface;
@@ -484,14 +484,12 @@ namespace ZeusDNSChanger
                 CloudflareDnsCard.Effect = cardEffect;
             }
 
-            // Add DNS Dialog
             if (AddDnsDialogBox != null)
             {
                 AddDnsDialogBox.Background = surface;
                 AddDnsDialogBox.BorderBrush = gold;
             }
 
-            // === LOGS PAGE ===
             if (LogsCard != null)
             {
                 LogsCard.Background = surface;
@@ -504,7 +502,6 @@ namespace ZeusDNSChanger
                 LogsInnerCard.BorderBrush = border;
             }
 
-            // === SETTINGS PAGE ===
             if (SettingsCard != null)
             {
                 SettingsCard.Background = surface;
@@ -512,7 +509,6 @@ namespace ZeusDNSChanger
                 SettingsCard.Effect = cardEffect;
             }
             
-            // Settings inner borders
             if (ThemeSettingBorder != null)
             {
                 ThemeSettingBorder.Background = isLight ? new SolidColorBrush(System.Windows.Media.Color.FromRgb(248, 249, 250)) : background;
@@ -593,6 +589,7 @@ namespace ZeusDNSChanger
             if (SelectDnsLabel != null) SelectDnsLabel.Foreground = textPrimary;
             if (BuiltInDnsLabel != null) BuiltInDnsLabel.Foreground = textSecondary;
             if (CustomDnsLabel != null) CustomDnsLabel.Foreground = textSecondary;
+
             if (NavHomeButton != null) NavHomeButton.Foreground = textPrimary;
             if (NavManageButton != null) NavManageButton.Foreground = textPrimary;
             if (NavLogsButton != null) NavLogsButton.Foreground = textPrimary;
@@ -786,6 +783,11 @@ namespace ZeusDNSChanger
             
             try
             {
+                if (StatusText != null)
+                {
+                    StatusText.Text = "...";
+                }
+
                 bool success = await System.Threading.Tasks.Task.Run(() =>
                     DnsManager.SetDnsServers(currentDnsAddresses.Primary, currentDnsAddresses.Secondary));
 
@@ -798,12 +800,14 @@ namespace ZeusDNSChanger
                 }
                 else
                 {
+                    UpdateDisconnectedState();
                     AddLog("❌ Failed to set DNS servers");
                     ShowCustomDialog("Error", "Failed to set DNS servers. Please check administrator privileges.", DialogType.Error);
                 }
             }
             catch (Exception ex)
             {
+                UpdateDisconnectedState();
                 AddLog($"❌ Error: {ex.Message}");
                 ShowCustomDialog("Error", $"Error: {ex.Message}", DialogType.Error);
             }
@@ -817,6 +821,11 @@ namespace ZeusDNSChanger
 
             try
             {
+                if (ActiveDnsText != null)
+                {
+                    ActiveDnsText.Text = "DNS: Automatic (DHCP)";
+                }
+
                 bool success = DnsManager.ClearDnsServers();
 
                 if (success)
@@ -830,12 +839,6 @@ namespace ZeusDNSChanger
                 {
                     AddLog("❌ Failed to clear DNS settings");
                     ShowCustomDialog("Error", "Failed to clear DNS settings.", DialogType.Error);
-                }
-
-                var dnsServers = DnsManager.GetCurrentDnsServers();
-                if (ActiveDnsText != null)
-                {
-                    ActiveDnsText.Text = "DNS: " + string.Join(", ", dnsServers);
                 }
             }
             catch (Exception ex)
@@ -872,8 +875,8 @@ namespace ZeusDNSChanger
 
             if (ActiveDnsText != null)
             {
-                var dnsServers = DnsManager.GetCurrentDnsServers();
-                ActiveDnsText.Text = "DNS: " + string.Join(", ", dnsServers);
+                ActiveDnsText.Text = $"DNS: {currentDnsAddresses.Primary}" + 
+                    (string.IsNullOrEmpty(currentDnsAddresses.Secondary) ? "" : $", {currentDnsAddresses.Secondary}");
             }
 
             if (Properties.Settings.Default.AutoRefreshIP)
@@ -957,10 +960,16 @@ namespace ZeusDNSChanger
 
         private void IntervalSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (!isInitialized)
+                return;
+                
             if (Math.Abs(e.OldValue - e.NewValue) < 0.1)
                 return;
 
             double intervalMinutes = e.NewValue;
+            
+            Properties.Settings.Default.IpRefreshInterval = (int)intervalMinutes;
+            Properties.Settings.Default.Save();
             
             if (ipCheckTimer != null && isConnected && selectedDnsType == "Zeus Plus")
             {
@@ -1208,7 +1217,6 @@ namespace ZeusDNSChanger
                 string theme = item.Tag.ToString();
                 ApplyTheme(theme);
                 AddLog($"⚙️ Theme changed to {theme}");
-                
                 Properties.Settings.Default.Theme = theme;
                 Properties.Settings.Default.Save();
             }
@@ -1229,39 +1237,28 @@ namespace ZeusDNSChanger
         {
             bool isPersian = LanguageManager.GetCurrentLanguage() == "فارسی";
             
-            // Navigation buttons
             if (NavHomeButton != null) NavHomeButton.ToolTip = LanguageManager.GetString("Home");
             if (NavManageButton != null) NavManageButton.ToolTip = LanguageManager.GetString("ManageDns");
             if (NavLogsButton != null) NavLogsButton.ToolTip = LanguageManager.GetString("ActivityLogs");
             if (NavSettingsButton != null) NavSettingsButton.ToolTip = LanguageManager.GetString("Settings");
-
-            // Home page
             if (SelectDnsLabel != null) SelectDnsLabel.Content = LanguageManager.GetString("SelectDnsServer");
             if (TokenLabel != null) TokenLabel.Content = LanguageManager.GetString("ZeusPlusToken");
             if (IntervalLabel != null) IntervalLabel.Content = LanguageManager.GetString("UpdateInterval");
             if (ClearCacheButton != null) ClearCacheButton.Content = LanguageManager.GetString("ClearDnsCache");
             if (StatusText != null && !isConnected) StatusText.Text = LanguageManager.GetString("OFF");
             if (StatusText != null && isConnected) StatusText.Text = LanguageManager.GetString("ON");
-
-            // Manage DNS page
             if (ManageDnsTitle != null) ManageDnsTitle.Text = LanguageManager.GetString("ManageDnsServers");
             if (BuiltInDnsLabel != null) BuiltInDnsLabel.Text = LanguageManager.GetString("BuiltInDns");
             if (CustomDnsLabel != null) CustomDnsLabel.Text = LanguageManager.GetString("CustomDns");
-            
-            // Add DNS dialog
             if (AddDnsDialogTitle != null) AddDnsDialogTitle.Text = LanguageManager.GetString("AddCustomDns");
             if (DnsNameLabel != null) DnsNameLabel.Content = LanguageManager.GetString("DnsName");
             if (PrimaryDnsLabel != null) PrimaryDnsLabel.Content = LanguageManager.GetString("PrimaryDns");
             if (SecondaryDnsLabel != null) SecondaryDnsLabel.Content = LanguageManager.GetString("SecondaryDns");
             if (CancelAddDnsButton != null) CancelAddDnsButton.Content = LanguageManager.GetString("Cancel");
             if (AddDnsButton != null) AddDnsButton.Content = LanguageManager.GetString("Add");
-
-            // Logs page
             if (LogsTitle != null) LogsTitle.Text = LanguageManager.GetString("ActivityLogs");
             if (CopyLogsButton != null) CopyLogsButton.Content = LanguageManager.GetString("CopyLogs");
             if (ClearLogsButton != null) ClearLogsButton.Content = LanguageManager.GetString("ClearLogs");
-
-            // Settings page
             if (SettingsTitle != null) SettingsTitle.Text = LanguageManager.GetString("Settings");
             if (ThemeTitleText != null) ThemeTitleText.Text = LanguageManager.GetString("Theme");
             if (ThemeDescText != null) ThemeDescText.Text = LanguageManager.GetString("ThemeDesc");
@@ -1298,7 +1295,7 @@ namespace ZeusDNSChanger
             if (DialogOkButton != null) DialogOkButton.Content = LanguageManager.GetString("OK");
             if (DialogCancelButton != null) DialogCancelButton.Content = LanguageManager.GetString("Cancel");
 
-            LoadCustomDnsServers();            
+            LoadCustomDnsServers();
             RefreshDnsComboBox();
 
             if (isPersian)
@@ -1355,6 +1352,11 @@ namespace ZeusDNSChanger
                 Properties.Settings.Default.StartupWithWindows = startup;
                 SetStartupWithWindows(startup);
                 AddLog(startup ? "✅ Added to Windows startup" : "✅ Removed from Windows startup");
+            }
+
+            if (IntervalSlider != null)
+            {
+                Properties.Settings.Default.IpRefreshInterval = (int)IntervalSlider.Value;
             }
 
             Properties.Settings.Default.Save();

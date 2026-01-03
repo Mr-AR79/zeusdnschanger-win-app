@@ -5,7 +5,7 @@
         Height="720" 
         Width="820"
         Background="{StaticResource DarkBackgroundBrush}"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="SingleBorderWindow"
         TextOptions.TextFormattingMode="Ideal"
@@ -431,7 +431,7 @@
                                       FontSize="14"
                                       FontWeight="SemiBold"
                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                      Margin="0,0,0,10"/>                            
+                                      Margin="0,0,0,10"/>
                             <StackPanel x:Name="CustomDnsItemsPanel"/>
                             
                         </StackPanel>
@@ -729,6 +729,7 @@
                             </Grid>
                         </Border>
                         
+                        <!-- Start with Windows Setting -->
                         <Border x:Name="StartupSettingBorder"
                                Background="{StaticResource DarkBackgroundBrush}"
                                BorderBrush="{StaticResource DarkBorderBrush}"

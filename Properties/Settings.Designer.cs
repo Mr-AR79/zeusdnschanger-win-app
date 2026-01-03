@@ -94,5 +94,17 @@ namespace ZeusDNSChanger.Properties {
                 this["ZeusPlusToken"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int IpRefreshInterval {
+            get {
+                return ((int)(this["IpRefreshInterval"]));
+            }
+            set {
+                this["IpRefreshInterval"] = value;
+            }
+        }
     }
 }
